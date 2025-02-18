@@ -5,12 +5,10 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/17 20:29:32 by vbicer            #+#    #+#              #
-#    Updated: 2025/02/17 20:42:45 by vbicer           ###   ########.fr        #
+#    Created: 2025/02/19 02:32:52 by vbicer            #+#    #+#              #
+#    Updated: 2025/02/19 02:32:54 by vbicer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-# Makefile
 
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
@@ -21,7 +19,7 @@ NAME = push_swap
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
 %.o: %.c push_swap.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -33,5 +31,3 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
-
-.PHONY: all clean fclean re
