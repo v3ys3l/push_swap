@@ -5,240 +5,89 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/19 02:32:42 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/19 02:54:33 by vbicer           ###   ########.fr       */
+/*   Created: 2025/02/24 12:09:36 by vbicer            #+#    #+#             */
+/*   Updated: 2025/02/24 12:11:13 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft/libft.h"
 #include "push_swap.h"
-#include <limits.h>
 
-void ft_swap(int *a, int *b)
+static void	creat_stack(char **tmp, t_stack *stack)
 {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+	int	i;
+
+	i = -1;
+	stack->size_a = ft_prtsize(tmp);
+	if (stack->size_a < 1)
+		ft_error("Error\n", stack, stack->flag);
+	stack->size_b = 0;
+	stack->a = (int *)malloc(sizeof(int) * stack->size_a);
+	if (!stack->a)
+		ft_error("Error\nMalloc failed", stack, stack->flag);
+	stack->b = (int *)malloc(sizeof(int) * stack->size_a);
+	if (!stack->b)
+		ft_error("Error\nMalloc failed", stack, stack->flag);
+	while (tmp[++i])
+	{
+		stack->num = ft_strtrim(tmp[i], " ");
+		stack->a[i] = ft_ps_atoi(stack->num, stack);
+		free(stack->num);
+	}
+	stack->num = NULL;
+	repeated_num(stack);
 }
 
-void sa(t_stack *a)
+static void	init_data(t_stack *stack)
 {
-    if (a->size > 1)
-    {
-        ft_swap(&a->arr[0], &a->arr[1]);
-        write(1, "sa\n", 3);
-    }
+	stack->a = NULL;
+	stack->b = NULL;
+	stack->tmp = NULL;
+	stack->num = NULL;
+	stack->size_a = 0;
+	stack->size_b = 0;
+	stack->flag = 0;
 }
 
-void sb(t_stack *b)
+void	ft_sort(t_stack *stack, int size)
 {
-    if (b->size > 1)
-    {
-        ft_swap(&b->arr[0], &b->arr[1]);
-        write(1, "sb\n", 3);
-    }
+	if (ft_checked_sorted(stack->a, stack->size_a) == 0)
+	{
+		if (size == 2)
+			sa(stack, 0);
+		else if (size == 3)
+			ft_sort_three(stack);
+		else if (stack->size_a <= 32)
+			selection_sort(stack);
+		else
+		{
+			index_stack(stack->a, stack->size_a, stack);
+			radix_sort(stack);
+		}
+	}
 }
 
-void ss(t_stack *a, t_stack *b)
+int	main(int ac, char **av)
 {
-    sa(a);
-    sb(b);
-}
+	t_stack	stack;
 
-void pa(t_stack *a, t_stack *b)
-{
-    if (b->size > 0)
-    {
-        for (int i = a->size; i > 0; i--)
-            a->arr[i] = a->arr[i - 1];
-        a->arr[0] = b->arr[0];
-        a->size++;
-        for (int i = 0; i < b->size - 1; i++)
-            b->arr[i] = b->arr[i + 1];
-        b->size--;
-        write(1, "pa\n", 3);
-    }
-}
-
-void pb(t_stack *a, t_stack *b)
-{
-    if (a->size > 0)
-    {
-        for (int i = b->size; i > 0; i--)
-            b->arr[i] = b->arr[i - 1];
-        b->arr[0] = a->arr[0];
-        b->size++;
-        for (int i = 0; i < a->size - 1; i++)
-            a->arr[i] = a->arr[i + 1];
-        a->size--;
-        write(1, "pb\n", 3);
-    }
-}
-
-void ra(t_stack *a)
-{
-    if (a->size > 1)
-    {
-        int temp = a->arr[0];
-        for (int i = 0; i < a->size - 1; i++)
-            a->arr[i] = a->arr[i + 1];
-        a->arr[a->size - 1] = temp;
-        write(1, "ra\n", 3);
-    }
-}
-
-void rb(t_stack *b)
-{
-    if (b->size > 1)
-    {
-        int temp = b->arr[0];
-        for (int i = 0; i < b->size - 1; i++)
-            b->arr[i] = b->arr[i + 1];
-        b->arr[b->size - 1] = temp;
-        write(1, "rb\n", 3);
-    }
-}
-
-void rr(t_stack *a, t_stack *b)
-{
-    ra(a);
-    rb(b);
-}
-
-void rra(t_stack *a)
-{
-    if (a->size > 1)
-    {
-        int temp = a->arr[a->size - 1];
-        for (int i = a->size - 1; i > 0; i--)
-            a->arr[i] = a->arr[i - 1];
-        a->arr[0] = temp;
-        write(1, "rra\n", 4);
-    }
-}
-
-void rrb(t_stack *b)
-{
-    if (b->size > 1)
-    {
-        int temp = b->arr[b->size - 1];
-        for (int i = b->size - 1; i > 0; i--)
-            b->arr[i] = b->arr[i - 1];
-        b->arr[0] = temp;
-        write(1, "rrb\n", 4);
-    }
-}
-
-void rrr(t_stack *a, t_stack *b)
-{
-    rra(a);
-    rrb(b);
-}
-
-int is_sorted(t_stack *a)
-{
-    for (int i = 0; i < a->size - 1; i++)
-        if (a->arr[i] > a->arr[i + 1])
-            return 0;
-    return 1;
-}
-
-void selection_sort(t_stack *a)
-{
-    for (int i = 0; i < a->size - 1; i++)
-    {
-        int min_idx = i;
-        for (int j = i + 1; j < a->size; j++)
-            if (a->arr[j] < a->arr[min_idx])
-                min_idx = j;
-
-        if (min_idx != i)
-        {
-            ft_swap(&a->arr[i], &a->arr[min_idx]);
-            write(1, "sa\n", 3);
-        }
-    }
-}
-
-void radix_sort(t_stack *a, t_stack *b)
-{
-    int max = get_max(a);
-    int bits = 0;
-
-    // Max değeri için bit uzunluğunu hesapla
-    while ((max >> bits) != 0)
-        bits++;
-
-    // Her bit için işlemi yap
-    for (int i = 0; i < bits; i++)
-    {
-        // a yığındaki her eleman için, bit kontrolü yaparak sıralama
-        for (int j = 0; j < a->size; j++)
-        {
-            if ((a->arr[0] >> i) & 1)
-                ra(a);  // Eğer bit 1 ise, `ra` uygula
-            else
-                pb(a, b);  // Eğer bit 0 ise, `pb` ile b'ye taşı
-        }
-
-        // b'deki tüm elemanları a'ya geri taşı
-        while (b->size > 0)
-            pa(a, b);
-    }
-}
-
-int get_max(t_stack *stack)
-{
-    int max = stack->arr[0];
-    for (int i = 1; i < stack->size; i++)
-        if (stack->arr[i] > max)
-            max = stack->arr[i];
-    return max;
-}
-
-void print_stack(t_stack *stack)
-{
-    for (int i = 0; i < stack->size; i++)
-        printf("%d ", stack->arr[i]);
-    printf("\n");
-}
-
-void free_stack(t_stack *stack)
-{
-    free(stack->arr);
-}
-
-int main(int argc, char **argv)
-{
-    t_stack a;
-    t_stack b;
-    int i;
-
-    // Stack 'a' ve 'b' başlatma
-    a.size = argc - 1;
-    a.arr = (int *)malloc(sizeof(int) * a.size);
-    b.size = 0;
-    b.arr = (int *)malloc(sizeof(int) * a.size);
-
-    // Argümanları stack 'a'ya kopyalama
-    for (i = 0; i < a.size; i++)
-    {
-        a.arr[i] = atoi(argv[i + 1]);
-    }
-
-    // Hedefimiz sıralı olmasını sağlamak
-    if (!is_sorted(&a))
-    {
-        // Radix sort veya selection sort kullanabiliriz
-        radix_sort(&a, &b); // Radix sort kullanılacak
-        // selection_sort(&a); // Alternatif olarak bu da kullanılabilir
-    }
-
-    // Sonuçları yazdırma (isteğe bağlı)
-    // print_stack(&a);
-
-    // Belleği temizleme
-    free_stack(&a);
-    free_stack(&b);
-
-    return 0;
+	if (ac == 1)
+		return (0);
+	av++;
+	init_data(&stack);
+	if (ac == 2)
+	{
+		stack.tmp = ft_split(av[0], ' ');
+		if (!stack.tmp)
+			ft_error("Error\nMalloc failed", &stack, 0);
+		stack.flag = 1;
+		creat_stack(stack.tmp, &stack);
+	}
+	else
+		creat_stack(av, &stack);
+	if (stack.flag == 1)
+		ft_free(stack.tmp);
+	ft_sort(&stack, stack.size_a);
+	free(stack.a);
+	free(stack.b);
 }

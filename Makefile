@@ -5,29 +5,49 @@
 #                                                     +:+ +:+         +:+      #
 #    By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/02/19 02:32:52 by vbicer            #+#    #+#              #
-#    Updated: 2025/02/19 02:32:54 by vbicer           ###   ########.fr        #
+#    Created: 2025/02/24 12:14:31 by vbicer            #+#    #+#              #
+#    Updated: 2025/02/24 12:27:23 by vbicer           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-SRC = push_swap.c
-OBJ = $(SRC:.c=.o)
 NAME = push_swap
+
+SRC =	push_swap.c\
+		rules/push.c\
+	  rules/reverse_rotate.c\
+	  rules/rotate.c\
+	  rules/swap.c\
+	  free.c\
+	  sort1.c\
+	  sort2.c\
+	  utils.c
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+LIBFT = libft/libft.a
+OBJ_DIR = obj
+
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ) $(LIBFT)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBFT)
 
-%.o: %.c push_swap.h
-	$(CC) $(CFLAGS) -c $< -o $@
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(@D)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT):
+	@$(MAKE) -C libft
 
 clean:
-	rm -f $(OBJ)
+	@$(MAKE) -C libft clean
+	@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(NAME)
-
+	@$(MAKE) -C libft fclean
+	@rm -rf $(NAME)
 re: fclean all
+
+.PHONY: all re clean fclean
