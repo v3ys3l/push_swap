@@ -6,14 +6,14 @@
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 12:07:33 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:07:35 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:16:36 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "push_swap.h"
 
-void	repeated_num(t_stack *stack)
+void	repeate_number(t_stack *stack)
 {
 	int	i;
 	int	j;
@@ -32,17 +32,17 @@ void	repeated_num(t_stack *stack)
 	}
 }
 
-int	ft_prtsize(char **ptr)
+int	ft_arrsize(char **ptr)
 {
 	int	i;
 
-	i = -1;
-	while (ptr[++i])
-		;
+	i = 0;
+	while (ptr[i])
+		i++;
 	return (i);
 }
 
-int	ft_ps_atoi(char *str, t_stack *stack)
+int	ps_atoi(char *str, t_stack *stack)
 {
 	int				sing;
 	long long int	res;
@@ -71,7 +71,7 @@ int	ft_ps_atoi(char *str, t_stack *stack)
 	return (res * sing);
 }
 
-int	ft_checked_sorted(int *stack, int size)
+int	ft_sorted(int *stack, int size)
 {
 	int	i;
 

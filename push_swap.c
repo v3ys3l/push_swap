@@ -6,63 +6,59 @@
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 12:09:36 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:11:13 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:16:40 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "push_swap.h"
 
-static void	creat_stack(char **tmp, t_stack *stack)
+static void	creat_stack(char **tmp, t_stack *stacks)
 {
 	int	i;
 
-	i = -1;
-	stack->size_a = ft_prtsize(tmp);
-	if (stack->size_a < 1)
-		ft_error("Error\n", stack, stack->flag);
-	stack->size_b = 0;
-	stack->a = (int *)malloc(sizeof(int) * stack->size_a);
-	if (!stack->a)
-		ft_error("Error\nMalloc failed", stack, stack->flag);
-	stack->b = (int *)malloc(sizeof(int) * stack->size_a);
-	if (!stack->b)
-		ft_error("Error\nMalloc failed", stack, stack->flag);
-	while (tmp[++i])
+	i = 0;
+	stacks->size_a = ft_arrsize(tmp);
+	if (stacks->size_a < 1)
+		ft_error("Error\n", stacks, stacks->flag);
+	stacks->a = (int *)malloc(sizeof(int) * stacks->size_a);
+	if (!stacks->a)
+		ft_error("Error\nMalloc failed", stacks, stacks->flag);
+	stacks->b = (int *)malloc(sizeof(int) * stacks->size_a);
+	if (!stacks->b)
+		ft_error("Error\nMalloc failed", stacks, stacks->flag);
+	while (tmp[i])
 	{
-		stack->num = ft_strtrim(tmp[i], " ");
-		stack->a[i] = ft_ps_atoi(stack->num, stack);
-		free(stack->num);
+		stacks->a[i] = ps_atoi(tmp[i], stacks);
+		i++;
 	}
-	stack->num = NULL;
-	repeated_num(stack);
+	repeate_number(stacks);
 }
 
-static void	init_data(t_stack *stack)
+static void	init_data(t_stack *stacks)
 {
-	stack->a = NULL;
-	stack->b = NULL;
-	stack->tmp = NULL;
-	stack->num = NULL;
-	stack->size_a = 0;
-	stack->size_b = 0;
-	stack->flag = 0;
+	stacks->a = NULL;
+	stacks->b = NULL;
+	stacks->tmp = NULL;
+	stacks->size_a = 0;
+	stacks->size_b = 0;
+	stacks->flag = 0;
 }
 
-void	ft_sort(t_stack *stack, int size)
+void	ft_sorts(t_stack *stacks, int size)
 {
-	if (ft_checked_sorted(stack->a, stack->size_a) == 0)
+	if (ft_sorted(stacks->a, stacks->size_a) == 0)
 	{
 		if (size == 2)
-			sa(stack, 0);
+			sa(stacks, 0);
 		else if (size == 3)
-			ft_sort_three(stack);
-		else if (stack->size_a <= 32)
-			selection_sort(stack);
+			ft_sort_three(stacks);
+		else if (stacks->size_a <= 32)
+			selection_sort(stacks);
 		else
 		{
-			index_stack(stack->a, stack->size_a, stack);
-			radix_sort(stack);
+			index_stack(stacks->a, stacks->size_a, stacks);
+			radix_sort(stacks);
 		}
 	}
 }
@@ -87,7 +83,7 @@ int	main(int ac, char **av)
 		creat_stack(av, &stack);
 	if (stack.flag == 1)
 		ft_free(stack.tmp);
-	ft_sort(&stack, stack.size_a);
+	ft_sorts(&stack, stack.size_a);
 	free(stack.a);
 	free(stack.b);
 }

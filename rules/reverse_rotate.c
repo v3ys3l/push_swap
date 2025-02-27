@@ -6,7 +6,7 @@
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:47:21 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:12:32 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/24 12:58:02 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	rrb(t_stack *stack, int print)
 			write(1, "rrb\n", 4);
 	}
 }
+
 void	rrr(t_stack *stack)
 {
 	ra(stack, 1);

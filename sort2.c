@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sot2.c                                             :+:      :+:    :+:   */
+/*   sort2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 12:04:14 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:14:02 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:16:57 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ static int	find_min_index(int *arr, int size)
 	return (index);
 }
 
-static void	r_or_rr(t_stack *stack, int min_value, int min_index)
+static void	ra_or_rra(t_stack *stack, int min_value, int min_index)
 {
 	if (min_index >= stack->size_a / 2 + stack->size_a % 2)
-		while (stack->a[0] != min_value && ft_checked_sorted(stack->a,
+		while (stack->a[0] != min_value && ft_sorted(stack->a,
 				stack->size_a) == 0)
 			rra(stack, 0);
 	else
-		while (stack->a[0] != min_value && ft_checked_sorted(stack->a,
+		while (stack->a[0] != min_value && ft_sorted(stack->a,
 				stack->size_a) == 0)
 			ra(stack, 0);
 }
@@ -74,13 +74,13 @@ void	selection_sort(t_stack *stack)
 
 	i = 0;
 	size = stack->size_a;
-	while (i < size && ft_checked_sorted(stack->a, stack->size_a) == 0)
+	while (i < size && ft_sorted(stack->a, stack->size_a) == 0)
 	{
 		min_index = find_min_index(stack->a, stack->size_a);
 		temp = stack->a[min_index];
 		if (stack->a[0] != temp && stack->size_a > 1)
-			r_or_rr(stack, temp, min_index);
-		if (ft_checked_sorted(stack->a, stack->size_a) == 0)
+			ra_or_rra(stack, temp, min_index);
+		if (ft_sorted(stack->a, stack->size_a) == 0)
 			pb(stack);
 		i++;
 	}

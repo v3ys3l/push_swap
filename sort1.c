@@ -6,14 +6,14 @@
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 12:00:04 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:02:56 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:16:49 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include "push_swap.h"
 
-static int	get_next_min_index(int *stack, int size, int *visited)
+static int	find_unvisited_min_index(int *stack, int size, int *visited)
 {
 	int	min_index;
 	int	min_value;
@@ -44,12 +44,12 @@ void	index_stack(int *stack, int size, t_stack *s)
 	visited = ft_calloc(size, sizeof(int));
 	if (!visited)
 		ft_error("Error\nMemory allocation failed", s, s->flag);
-	min_index = get_next_min_index(stack, size, visited);
+	min_index = find_unvisited_min_index(stack, size, visited);
 	while (min_index != -1)
 	{
 		stack[min_index] = index++;
 		visited[min_index] = 1;
-		min_index = get_next_min_index(stack, size, visited);
+		min_index = find_unvisited_min_index(stack, size, visited);
 	}
 	free(visited);
 }
@@ -99,20 +99,22 @@ void	radix_sort(t_stack *stack)
 	int	size;
 
 	max_bits = get_max_bits(stack);
-	i = -1;
-	while (++i < max_bits && ft_checked_sorted(stack->a, stack->size_a) == 0)
+	i = 0;
+	while (i < max_bits && ft_sorted(stack->a, stack->size_a) == 0)
 	{
 		size = stack->size_a;
-		j = -1;
-		while (++j < size && ft_checked_sorted(stack->a, stack->size_a) == 0)
+		j = 0;
+		while (j < size && ft_sorted(stack->a, stack->size_a) == 0)
 		{
 			if (((stack->a[0] >> i) & 1) == 1)
 				ra(stack, 0);
 			else
 				pb(stack);
+			j++;
 		}
 		if (i + 1 <= max_bits)
 			radix_sort_b(stack, i + 1);
+		i++;
 	}
 	while (stack->size_b > 0)
 		pa(stack);

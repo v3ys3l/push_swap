@@ -6,7 +6,7 @@
 /*   By: vbicer <vbicer@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 11:55:52 by vbicer            #+#    #+#             */
-/*   Updated: 2025/02/24 12:00:36 by vbicer           ###   ########.fr       */
+/*   Updated: 2025/02/27 17:09:50 by vbicer           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	ft_error(char *str, t_stack *stack, int flag)
 		free(stack->a);
 	if (stack->b != NULL)
 		free(stack->b);
-	if (stack->num != NULL)
-		free(stack->num);
 	ft_putstr_fd(str, 2);
 	exit(1);
 }
